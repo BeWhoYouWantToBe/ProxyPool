@@ -24,10 +24,11 @@ class ProxypoolPipeline(object):
 
 
     def process_item(self, item, spider):
-        item['location'] = [ i.strip() for i in item['location']] 
+        item['protocol'] = [k.strip('代理') for k in item['protocol']]
+        item['location'] = ['中国' + k for k in item['location']]
         try:
             for i in range(len(item['ip'])):
-                sql = "insert into proxy values ('{}','{}','{}','{}',now())".format(item['ip'][i],item['port'][i],item['protocol'][i],item['location'][i])
+                sql = "insert ignore into proxy values ('{}','{}','{}','{}',now())".format(item['ip'][i],item['port'][i],item['protocol'][i],item['location'][i])
 #                pdb.set_trace()
                 self.cur.execute(sql)
             self.conn.commit()   

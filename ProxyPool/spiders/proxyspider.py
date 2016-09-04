@@ -7,22 +7,21 @@ from ProxyPool.items  import ProxypoolItem
 
 class ProxyspiderSpider(CrawlSpider):
     name = 'proxyspider'
-    allowed_domains = ['kuaidaili.com']
+    allowed_domains = ['mimiip.com']
     start_urls = [
-        'http://www.kuaidaili.com/free/outha/1/',
-        'http://www.kuaidaili.com/free/inha/1/',
+        'http://www.mimiip.com/gngao/'
     ]
 
     rules = (
-        Rule(LinkExtractor(allow=r'/free/(out|in)ha/[1-9]/$'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=r'/gngao/[0-9]+$'), callback='parse_item', follow=True),
     )
 
     def parse_item(self, response):
         i = ProxypoolItem() 
-        i['ip'] = response.xpath('//td[@data-title="IP"]/text()').extract()
-        i['port'] = response.xpath('//td[@data-title="PORT"]/text()').extract()
-        i['protocol'] = response.xpath('//td[@data-title="类型"]/text()').extract()
-        i['location'] = response.xpath('//td[@data-title="位置"]/text()').extract()
+        i['ip'] = response.xpath('//tr/td[1]/text()').extract()
+        i['port'] = response.xpath('//tr/td[2]/text()').extract()
+        i['protocol'] = response.xpath('//tr/td[5]/text()').extract()
+        i['location'] = response.xpath('//tr/td[3]/a[1]/text()').extract()
 
 #        from scrapy.shell import inspect_response
 #        inspect_response(response,self)
